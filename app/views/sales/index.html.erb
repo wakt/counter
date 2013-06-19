@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>The front counter app</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.css" type="text/css" />
+    <link rel="stylesheet" href="css/theme1.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+	  <script type="text/javascript" src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmaskedinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="js/spin.js"></script>
+    
+		<style>
+			.ui-dialog-titlebar
+			{
+				background-color: #BBC8F9;
+				border-top-color: #BBC8F9;
+				border-left-color: #BBC8F9;
+				border-right-color: #BBC8F9;
+				border-bottom-color: #BBC8F9;
+				border: #FFFFFF;
+				background: -webkit-gradient(linear, left top, left bottom, from(#bbc8f9), to(#fff));
+			}
+			
+			.ui-widget input,
+			.ui-widget select,
+			.ui-widget textarea,
+			.ui-widget button {
+				font-size: 20px;
+			}
+			
+		</style>
+	
+		<% @title="Fast Fuels" %>
+		
+    <script type="text/javascript" src="js/fastfuels.js"></script>
+    
+    <script type="text/javascript">
+
+      var theme = 'theme1';
+      var data2 = '<%= @customers %>';
+			var data = '<%= @customers.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+			var custList = JSON.parse(data);
+      var items = JSON.parse('<%= @items.gsub(/\],/,"\],\\\n").gsub(/\},/,"\},\\\n").gsub(/\\\"/,"&quot;").gsub(/\'/,%q(\\\')).html_safe %>');
+
+      $(document).ready(function () {
+          var custSource = createCustomerSource(data);
+	        var custDataAdapter = new $.jqx.dataAdapter(custSource);
+	        createCustomerComboBox(custDataAdapter,theme);
+        	custDataAdapter.dataBind();
+        	createPaymentButtons(theme);
+
+					createProductTabs(theme);
+
+					createBandInput(theme);
+					
+          createFuelButtons(theme);
+
+					var oilLubeItemSource = createItemSource(items[1]);
+          var oilLubeItemDataAdapter = new $.jqx.dataAdapter(oilLubeItemSource);
+					createOilLubeItemListBox(oilLubeItemDataAdapter,theme);
+					oilLubeItemDataAdapter.dataBind();
+
+					var miscellaneousItemSource = createItemSource(items[2]);
+          var miscellaneousItemDataAdapter = new $.jqx.dataAdapter(miscellaneousItemSource);
+					createMiscellaneousItemListBox(miscellaneousItemDataAdapter,theme);
+					miscellaneousItemDataAdapter.dataBind();
+
+					initializeItemDialog();
+					initializePostDialog();
+					initializeInvoiceButton();
+
+					$(".jqx-listtitem-element").css("height","32px;");
+					$(".jqx-combobox-input").css("font-size","24px;");
+     	});
+        
+    </script>
+</head>
+
+<body class='default'>
+<div id='root' class="ui-widget">
+	<div style = "margin: 10px; height: 30%;">
+		<table>
+			<tr>
+				<td style = "width: 100%" >
+			    <div id='custContainer' style="font-size: 48px; float: left; width: 100%;" >
+      		  <div id="custCombo" style="font-size: 48px;"></div>
+		        <div id="custselectionlog" style="font-size: 48px;"></div>
+			    </div>
+		    </td>
+	    </tr>
+  	  <tr>
+  	  	<td>
+	  	  	<table style = "width: 100%;">
+  		  		<tr style = "width: 100%;">
+    					<td style = "width: 80%;">
+    						<div id="PaymentButtons" style="margin: 10px;">
+       						<button style="margin: 3px; padding:4px 32px; font-size: 24px; border-radius: 5px;" id="DiscountPrice">
+           					Cash/Cheque/Debit</button>
+			       			<button style="margin: 3px; padding:4px 32px; font-size: 24px; border-radius: 5px;" id="RegularPrice">
+      			     		Credit Card</button>
+       						<button style="margin: 3px; padding:4px 32px; font-size: 24px; border-radius: 5px;" id="OnAccount">
+			           		Account</button>
+    						</div>
+			    		</td>
+    					<td>
+	    					<div>
+  	    	    		<input style='margin-top: 3px;' id='BandInput' placeHolder="Band Number"/>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+  </div>
+    
+  <div style = "margin: 10px; height: 35%; width: 100%;">
+  	<table style='width: 90%;'>
+	  	<tr style='width: 100%;'>
+  			<td style = "width: 100%;" >
+    			<div id='jqxTabs' style='width: 100%;'>
+				    <ul style='margin-left: 42px; font-size: 32px;'>
+  			      <li>Fuel</li>
+    	  		  <li>Oil/Lube</li>
+      	  		<li>Misc.</li>
+			  	  </ul>
+    				<div style='width: 100%;'>
+    					<table style='width: 100%;'>
+    						<tr style='width: 100%;'>
+    							<td style='width: 100%;'>
+			   						<div id="FuelButtons" style="margin: 0px; width: 90%; font-size: 18px;">
+   									</div>
+   								</td>
+   							</tr>
+   						</table>
+	    			</div>
+		  	  	<div id = 'LubeTab' style="width: 100%" >
+							<table style="width: 100%">
+								<tr style="width: 100%">
+									<td style = "width: 100%" >
+			    					<div id='ItemList' style="font-size: 32px; float: left; width: 100%;" >
+			    					</div>
+		    					</td>
+	    					</tr>
+							</table>
+			    	</div>
+  			  	<div>
+							<table style="width: 100%">
+								<tr style="width: 100%">
+									<td style = "width: 100%" >
+			    					<div id='MiscList' style="font-size: 32px; float: left; width: 100%;" >
+			    					</div>
+		    					</td>
+	    					</tr>
+							</table>
+	    			</div>
+    
+    			</div>
+    		</td>
+	  	</tr>
+	  </table>
+  </div>
+  
+  <div style="margin: 0px; padding: 0px; height: 35%; width: 90%;" id="Cart">
+  	<table style="margin: 0px; padding: 0px; width: 100%;">
+  		<tr style="margin: 0px; padding: 0px;">
+  			<td style="margin: 0px; padding: 0px; width: 100%;">
+  				<div style="margin: 0px; padding: 0px; width: 100%;" id="CartGrid"><div>
+  			</td>
+  		</tr>
+  		<tr>
+  			<td>
+  				<input type="button" value="Invoice" id="InvoiceButton" />
+  			</td>
+  		</tr>
+  	</table>
+  </div>
+</div>
+
+
+<div id="ItemDialog" style="height: 100%; padding: 0; margins: 0;">
+</div>
+
+<div id="PostDialog" style="height: 100%; padding: 0; margins: 0; font-size: 20px;">
+	<table>
+		<tr>
+			<td><p style="font-size: 20px;">To start a new sale, use the 'Continue to next transaction' button</p></td>
+		</tr>
+		<tr>
+			<td><p style="font-size: 20px;">If there are problems with the printed invoice, use the 'Reprint invoice' button</p></td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>	

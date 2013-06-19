@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>In this example the ComboBox is bound to a Remote Data.</title>
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var theme = 'ui-lightness';
+
+						var data = '<%= @customers.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+						
+            var source =
+            {
+            	localdata: data,
+							datatype: "jsonp",
+     					datafields: [
+     						{ name: 'lId' },
+	        			{ name: 'sName' },
+	        			{ name: 'sStreet1' },
+	        			{ name: 'sCity' },
+	        			{ name: 'sProvState' }
+	        			
+    					],
+    					data: "",
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            $("#jqxcombobox").jqxComboBox(
+            {
+                width: 700,
+                height: 25,
+                source: dataAdapter,
+                theme: theme,
+                selectedIndex: 0,
+                autoComplete: true,
+                minLength: 1,
+                displayMember: "sName",
+                valueMember: "sName",
+   							renderer: function (index, label, value) {
+                	var item = dataAdapter.records[index];
+        					if (item != null) {
+            				var label = item['sName'] + '   -   ' + item['sStreet1'] + ' ' + item['sCity'] + ' ' + item['sProvState'];
+            			return label;
+        			}
+        			return "";
+    			},
+    			renderSelectedItem: function(index, item)
+    			{
+        			var item = dataAdapter.records[index];
+        			if (item != null) {
+            			var label = item['sname'] + '   -   ' + item['sStreet1'] + ' ' + item['sCity'] + ' ' + item['sProvState'];
+            			return label;
+        			}
+        			return "";   
+    			},
+    			search: function (searchString) {
+        			dataAdapter.dataBind();    			}
+            });
+            $("#jqxcombobox").on('open', function (event) {
+                if (event.args) {
+                	dataAdapter.dataBind();
+                }
+    		    			
+            });
+        });
+        
+        var items = '[[288,"xx1",""],[1,"01","1 350ml Brake Fluid"],[2,"02","1 500ml Outboard Oil"],[3,"1","1 L ATF"],[4,"2","1 L Easymix"],[5,"5","1 L HD Chain Oil"],[6,"6","1 L HDX Plus 30"],[8,"8","1 L Outboard Oil"],[9,"9","1 L Power Steering Fluid"],[10,"10","1 L Pro Ex 10W30"],[11,"11","1 L Pro Ex 5W30"],[12,"12","1 L Pro Ult 10W40"],[13,"13","1 L Synthetic 10W30"],[14,"18","1 L Synthetic 15-50"]';
+        
+        $('#jqxTabs').jqxTabs({ width: 550, height: 150 });
+
+    </script>
+</head>
+<body class='default'>
+		<div style="margin: 100px;">
+    <div id='jqxTabs'>
+		    <ul style='margin-left: 20px;'>
+  	      <li>Tab 1</li>
+    	    <li>Tab 2</li>
+      	  <li>Tab 3</li>
+        	<li>Tab 4</li>
+	        <li>Tab 5</li>
+  	  </ul>
+    	<div>
+      	  Content 1
+	    </div>
+  	  <div>
+    	    Content 2
+	    </div>
+  	  <div>
+    	    Content 3
+	    </div>
+  	  <div>
+    	    Content 4
+	    </div>
+  	  <div>
+    	    Content 5
+	    </div>
+    
+    </div>
+		</div>
+		<div>
+    <div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
+        <div id="jqxcombobox"></div>
+        <div id="selectionlog"></div>
+    </div>
+    </div>
+    
+</body>
+</html>	
