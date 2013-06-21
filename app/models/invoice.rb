@@ -29,28 +29,28 @@ class Invoice < ActiveRecord::Base
 
 			stroke_color "ffffff"
 			transparent(0.3,0.0) do
-				fill_rectangle [0,560], 540, 10
+				fill_rectangle [0,560.5], 540, 11
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [0,549], 150, 20
+				fill_rectangle [0,549.5], 150, 20.5
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [0,528], 540, 8
+				fill_rectangle [0,529], 540, 9
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [520,549], 20, 20
+				fill_rectangle [520,549.5], 20, 20.5
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [0,498], 540, 8
+				fill_rectangle [0,520], 150, 20.5
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [0,519], 150, 20
+				fill_rectangle [0,499.5], 540, 8.5
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [240,519], 100, 20
+				fill_rectangle [240,520], 100, 20.5
 			end
 			transparent(0.3,0.0) do
-				fill_rectangle [520,519], 20, 20
+				fill_rectangle [520,520], 20, 20.5
 			end
 			
 			fill_color "000000"
