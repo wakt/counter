@@ -241,10 +241,14 @@
 				
 			function createFuelButtons(theme) {
 
-				htmlStr = '';
+				htmlStr = '<table><tr>';
 				items[0].forEach(function(element,index,itemList) {
-					htmlStr += '<input type="button" value="' + element['sShortName'] + '" id="' + noSpaces(element['packaging'][0]['sPartCode']) + '" />';
+					label = element['sShortName'] + "\n" + element['packaging'][0]['dPrice']
+					if(element['packaging'][0]['statusprice'] != null)
+						label += "\n(status: " + element['packaging'][0]['statusprice'] + ")"
+					htmlStr += '<td><input type="button" value="' + label + '" id="' + noSpaces(element['packaging'][0]['sPartCode']) + '" /></td>';
 				});
+				htmlStr += '</tr></table>'
 				$("#FuelButtons").html(htmlStr);
 				// for each item
 				//   create the button with the id of the part code as built above

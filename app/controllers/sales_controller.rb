@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'taxation'
 
 class SalesController < ApplicationController
   # GET /sales
@@ -11,7 +12,27 @@ class SalesController < ApplicationController
 #		@customers = Net::HTTP.get(URI.parse('http://127.0.0.1:3001/customers.json'))
 #		@items = Net::HTTP.get(URI.parse('http://127.0.0.1:3001/items.json'))
 		@items = Net::HTTP.get(URI.parse( Counter::Application.config.simplyurl + 'items.json'))
-		
+#		puts "raw items"
+#		puts @items
+#		puts "parsed items"
+#		puts ActiveSupport::JSON.decode(@items).size
+		@items = ActiveSupport::JSON.decode(@items).map { |group|
+#			puts group
+			group.map { |item|
+#				puts item 
+				item['packaging'] = item['packaging'].map { |pkg|
+					if pkg['statuspremium'] != nil
+						pkg['statusprice'] = Taxation::sellingPrice(pkg,true,"1")
+					end
+					pkg
+				}
+				item
+			}
+		}
+		@items = ActiveSupport::JSON.encode(@items)
+#		puts "reencoded items"
+#		puts @items
+			
     respond_to do |format|
       format.html # index.html.erb
 #      format.json { render json: @sales }
