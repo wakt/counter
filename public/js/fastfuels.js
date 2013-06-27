@@ -100,7 +100,7 @@
           source: custDataAdapter,
           theme: theme,
           selectedIndex: -1,
-//          autoComplete: true,
+          autoComplete: true,
           searchMode: 'containsignorecase',
           minLength: 1,
           enableBrowserBoundsDetection: true,
@@ -123,9 +123,11 @@
 					},
 					renderSelectedItem: function(index, item)
 					{
-  					var item = custDataAdapter.records[index];
+//						console.log(index);
+//						console.log(item);
+//  					var item = custDataAdapter.records[index];
   					if (item != null) {
-      				var label = item['sName'];
+      				var label = item.originalItem['sName'];
       				return label;
   					}
   					return "";   
@@ -137,9 +139,7 @@
   					itemClickTime = +new Date();
 				    var args = event.args;
 				    if (args) {
-//				    	console.log(args.index);
 				    	var cust = findCustomer(args.item.originalItem['lId']);
-//							var item = $('#custCombo').jqxComboBox('getItem', args.item.originalItem['lId']);
               if (cust != null) {
               	if(cust['drCrLimit'] > 0) {
               		$("#OnAccount").show();

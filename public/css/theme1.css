@@ -34,6 +34,21 @@
   color: #222222;
   border-color: #AAAAAA;
   background-color: #BBC8F9;
+  background-image: -moz-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -ms-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -o-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#E8E8E8), to(#BBC8F9));
+  background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: linear-gradient(top, #E8E8E8, #BBC8F9);
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+}
+.jqx-fill-state-pressed-theme1
+{
+  color: red;
+  border-color: #AAAAAA;
+  background-color: #EFEFEF;
   background-image: -moz-linear-gradient(top, #BBC8F9, #EFEFEF);
   background-image: -ms-linear-gradient(top, #BBC8F9, #EFEFEF);
   background-image: -o-linear-gradient(top, #BBC8F9, #EFEFEF);
@@ -73,13 +88,6 @@
   -moz-background-clip: padding;
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
-}
-.jqx-fill-state-pressed-theme1
-{
-  color: #222222;
-  border-color: #AAAAAA;
-  background-color: #D1D1D1;
-  background-image: none;
 }
 .jqx-tabs-title-selected-top-theme1, .jqx-tabs-selection-tracker-top-theme1
 {
@@ -234,8 +242,32 @@
 .jqx-group-button-pressed,
 .jqx-group-button-pressed-theme1
 {
+  background-color: #BBC8F9;
+  background-image: -moz-linear-gradient(top, #BBC8F9, #EFEFEF);
+  background-image: -ms-linear-gradient(top, #BBC8F9, #EFEFEF);
+  background-image: -o-linear-gradient(top, #BBC8F9, #EFEFEF);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#BBC8F9), to(#EFEFEF));
+  background-image: -webkit-linear-gradient(top, #BBC8F9, #EFEFEF);
+  background-image: linear-gradient(top, #BBC8F9, #EFEFEF);
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+
+	
+.jqx-group-button-normal,
+.jqx-group-button-normal-theme1
+{
+	color: gray;
   background-color: #D1D1D1;
-  background-image: none;
+  background-image: -moz-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -ms-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -o-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: -webkit-gradient(linear, center top, center bottom, from(#E8E8E8), to(#BBC8F9));
+  background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: linear-gradient(top, #E8E8E8, #BBC8F9);
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
 }
 	
 .jqx-combobox-state-selected
