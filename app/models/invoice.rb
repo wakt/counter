@@ -18,38 +18,40 @@ class Invoice < ActiveRecord::Base
 		puts params
 		puts params[:invoicenum]
 		
+		blockfillopacity = 0.05
+		
 		Prawn::Document.generate("public\\invoices\\" + params[:invoicenum] + ".pdf") do
 #		Prawn::Document.generate("public\\invoices\\test.pdf") do
 	
 			image "public/images/logo.jpg", :at => [335,740], :width => 180, :height => 180
 
-			transparent(0.3,1.0) do
+			transparent(blockfillopacity,1.0) do
 				fill_rectangle [0,740], 300, 179.5
 			end
 
 			stroke_color "ffffff"
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [0,560.5], 540, 11
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [0,549.5], 150, 20.5
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [0,529], 540, 9
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [520,549.5], 20, 20.5
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [0,520], 150, 20.5
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [0,499.5], 540, 8.5
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [240,520], 100, 20.5
 			end
-			transparent(0.3,0.0) do
+			transparent(blockfillopacity,0.0) do
 				fill_rectangle [520,520], 20, 20.5
 			end
 			
@@ -188,7 +190,13 @@ class Invoice < ActiveRecord::Base
 #					style(row(line), :padding => 2)
 #				end
 			end
-						
+
+			if params[:payment] == "2"
+				bounding_box([0,20],:width => 80,:height => 20) do
+					text "On Account"
+				end
+			end
+			
 			bounding_box([190,20],:width => 80,:height => 20) do
 				text "Signature:"
 			end

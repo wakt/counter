@@ -7,7 +7,7 @@ module Taxation
 			if(payment == "0")
 				price -= 0.015
 			end
-			if item['statuspremium'] != nil
+			if item['statuspremium'] != nil && native == true
 				price += item['statuspremium'].to_f
 			end
 			price = sprintf("%.04f", price)

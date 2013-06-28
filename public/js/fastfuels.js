@@ -145,6 +145,8 @@
               		$("#OnAccount").show();
               	}
               	else {
+              		if($("#PaymentButtons").jqxButtonGroup('getSelection') == 2)
+						     		$("#PaymentButtons").jqxButtonGroup('setSelection', 1);
               		$("#OnAccount").hide();
               	}
 
@@ -223,6 +225,9 @@
 			
 			function createProductTabs(theme) {
 		    $('#jqxTabs').jqxTabs({ width: '100%', height: 300, scrollable: false, theme: theme	});
+//		    $('#TabList').append('<li style="float: left; position: static; height: 18px;"><div style="float: left; margin-top: 0px;"><table><tr><td style="width: 30%;"></td><td style="width: 30%;"><input type="button" value="Invoice" id="InvoiceButton" /></td><td style="width: 30%;"></td></div></li>');
+		    $('#TabList').append('<li class="jqx-reset jqx-disableselect jqx-tabs-title jqx-tabs-title-theme1 jqx-item jqx-item-theme1 jqx-rc-t jqx-rc-t-theme1" style="float: left; position: static; height: 30px; margin: 0px; padding: 0px; border: 0px;"><table style="width: 450px;"><tr><td style="width: 200px;"></td><td style="width: 30%; padding: 0px; height 100%;"><input type="button" value="Print Invoice" id="InvoiceButton" style="margin: 0px; height: 20px; padding: 0px; font-size: 24px; vertical-align: middle;"/></td></tr></table></li>');
+//		    $('#TabList').append('<li class="jqx-reset jqx-disableselect jqx-tabs-title jqx-tabs-title-theme1 jqx-item jqx-item-theme1 jqx-rc-t jqx-rc-t-theme1" style="float: left; position: static; height: 18px;"><input type="button" value="Invoice" id="InvoiceButton" /></li>');
 			}
 			
 			function createBandInput(theme) {
@@ -681,7 +686,8 @@
 			}
 
 			function initializeInvoiceButton() {
-				$("#InvoiceButton").jqxButton({ theme: theme, width: $(window).width() - 100, height: 100 });
+//				$("#InvoiceButton").jqxButton({ theme: theme, width: $(window).width() - 100, height: 100 });
+				$("#InvoiceButton").jqxButton({ theme: theme, width: 200, height: 25 });
 				$("#InvoiceButton").hide();
 				$("#InvoiceButton").on('click', function (event) {
 					if(cart['invoicenum'] == null) {
