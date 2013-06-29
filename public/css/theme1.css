@@ -39,7 +39,7 @@
   background-image: -o-linear-gradient(top, #E8E8E8, #BBC8F9);
   background-image: -webkit-gradient(linear, center top, center bottom, from(#E8E8E8), to(#BBC8F9));
   background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);
-  background-image: linear-gradient(top, #E8E8E8, #BBC8F9);
+  background-image: linear-gradient(top, #7972F9, #BBC8F9);
   -moz-background-clip: padding;
   background-clip: padding-box;
   -webkit-background-clip: padding-box;
@@ -47,14 +47,16 @@
 }
 .jqx-fill-state-pressed-theme1
 {
-  color: #CC0033;
+/*  color: #CC0033;*/
+  color: #DD0647;
   border-color: #AAAAAA;
   background-color: #EFEFEF;
   background-image: -moz-linear-gradient(top, #BBC8F9, #EFEFEF);
   background-image: -ms-linear-gradient(top, #BBC8F9, #EFEFEF);
   background-image: -o-linear-gradient(top, #BBC8F9, #EFEFEF);
   background-image: -webkit-gradient(linear, center top, center bottom, from(#BBC8F9), to(#EFEFEF));
-  background-image: -webkit-linear-gradient(top, #4369F2, #A39C9C);
+/*  background-image: -webkit-linear-gradient(top, #4369F2, #A39C9C);*/
+  background-image: -webkit-linear-gradient(top, #7972F9, #A4A3BA);
   background-image: linear-gradient(top, #BBC8F9, #EFEFEF);
   -moz-background-clip: padding;
   background-clip: padding-box;
