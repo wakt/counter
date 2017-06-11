@@ -95,10 +95,14 @@ class CartsController < ApplicationController
   	# append total an taxes to response
   	# input
   	#   payment parameters, item parameters
-  	#     { :payment => Credit, :band => 6700098765, :items => [
-  	#				{ :lId => 345, "quantity => 2 },
-  	#				{ :lId => 346, "quantity => 5 },
-  	#				]
+  	#     { "customerName" => ..., "band" => 6700098765, "payment" => 1/2/3, "status" => true/false,
+  	#				"type" = R/C/M/1/..., "priceList" => 1/2/3/..., "items" => {
+  	#				"0" => { :lId => 345, "quantity => 2 },
+  	#				"1" => { :lId => 346, "quantity => 5 },
+  	## items can be passed in resolved adequately to avoid a further lookup as above would require
+  	#				"2" => { :item => lId, :sPartCode => ..., :sName => ..., :sSellUnit => ...,
+  	#									:baseprice => ..., taxes => ## complete as from item or TaxStandin
+  	#				}
   	#			}
   	#	output
   	#		total, taxes, line items

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>The front counter app</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.css" type="text/css" />
+    <link rel="stylesheet" href="css/theme1.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+	  <script type="text/javascript" src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmaskedinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="js/spin.js"></script>
+    
+  		<style>
+			.ui-dialog-titlebar
+			{
+				background-color: #BBC8F9;
+				border-top-color: #BBC8F9;
+				border-left-color: #BBC8F9;
+				border-right-color: #BBC8F9;
+				border-bottom-color: #BBC8F9;
+				border: #FFFFFF;
+				background: -webkit-gradient(linear, left top, left bottom, from(#bbc8f9), to(#fff));
+			}
+			
+			.ui-widget input,
+			.ui-widget select,
+			.ui-widget textarea,
+			.ui-widget button {
+				font-size: 20px;
+			}
+			
+		</style>
+	
+		<% @title="Fast Fuels Supplemental Customer Data" %>
+		
+    <script type="text/javascript" src="js/custsupp.js"></script>
+    
+    <script type="text/javascript">
+
+      var theme = 'theme1';
+//      var data2 = '<%= @customers %>';
+			var customers = '<%= @customers.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+			var custList = JSON.parse(customers);
+      var items = JSON.parse('<%= @items.gsub(/\],/,"\],\\\n").gsub(/\},/,"\},\\\n").gsub(/\\\"/,"&quot;").gsub(/\'/,%q(\\\')).html_safe %>');
+
+      $(document).ready(function () {
+          var custSource = createCustomerSource(customers);
+	        var custDataAdapter = new $.jqx.dataAdapter(custSource);
+	        createCustomerList(custDataAdapter);
+	        
+ 					createBandInput(theme);
+ 					createAccessCodeInput(theme);
+ 					createCapacityInput(theme);
+					
+          var taxSource = createTaxationSource();
+	        var taxDataAdapter = new $.jqx.dataAdapter(taxSource);
+	        createTaxationList(taxDataAdapter);
+
+//					tankSource = createTankSource(cust);
+//	        var tankDataAdapter = new $.jqx.dataAdapter(tankSource);
+	        createTankList([]);
+	        $("#TankInfo").hide();
+					$("#SingleTank").hide();
+					$("#TankListTable").hide();
+					$("#TankInputTable").hide();
+					$("#UpdateCustomer").hide();
+
+          var fuelSource = createFuelSource();
+	        var fuelDataAdapter = new $.jqx.dataAdapter(fuelSource);
+	        createFuelList(fuelDataAdapter);
+
+          var regionCodeSource = createRegionCodeSource();
+	        var regionCodeDataAdapter = new $.jqx.dataAdapter(regionCodeSource);
+	        createRegionCodeList(regionCodeDataAdapter);
+
+          var positionSource = createPositionSource();
+	        var positionDataAdapter = new $.jqx.dataAdapter(positionSource);
+	        createPositionList(positionDataAdapter);
+
+//          var fobSource = createFobSource();
+//	        var fobDataAdapter = new $.jqx.dataAdapter(fobSource);
+	        createFobList([]);
+					$("#FobList").hide();
+					$("#RemoveFob").hide();
+					$("#FobListTable").hide();
+					$("#FobInputTable").hide();
+
+//          var fobProductSource = createFobProductSource();
+//	        var fobProductDataAdapter = new $.jqx.dataAdapter(fobProductSource);
+//	        createFobProductList(fobProductDataAdapter);
+
+					$("#DetailsTable").hide();
+
+     	});
+        
+    </script>
+</head>
+
+<body class='default'>
+<div id='root' class="ui-widget" style="padding:0px;">
+	<table style = "width: 100%">
+		<tr>
+			<td style = "width: 20%;background-color:#E0E0E0;">
+			</td>
+			<td style = "width: 60%;">
+				<table style = "width:100%;">
+				<caption style = "text-align:left;font-size:20px;"><b>Fast Fuels Simply Accounting Customer Supplemental Information</b></caption>
+					<tr>
+						<td style = "width:100%">
+							<table style = "width:100%;padding-top:10px;padding-bottom:10px">
+								<tr>
+									<td style = "width:80%">
+										<div id="CustomerList" style = "width: 100%;"></div>
+									</td>
+									<td style = "width:20%;padding-left:25px">
+	       						<button style="margin: 3px; padding:4px 4px; font-size: 16px; border-radius: 5px;" id="UpdateCustomer">Update Customer</button>
+	       					</td>
+								</tr>
+							</table>								
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table style = "width:100%;padding-top:10px;padding-bottom:10px;border:1px solid black;padding-left:3px;padding-right:3px;min-height:120px">
+								<caption style = "text-align:left"><b>Customer Details</b></caption>
+								<tr style = "border:0;">
+									<td style = "width:100%">
+										<table style = "width:100%;" id="DetailsTable">
+											<tr style="border:0">
+												<td style = "width:100%">
+													<table style="width:100%">
+														<tr>
+															<td style = "width:30%;border:0;padding-left:10px;">
+																<table style="width:100%">
+																	<tr>
+																		<td style = "width:10%;text-align:right;font-size:20px">Band<td>
+																		<td style = "width:90%">
+											    		    		<input style='margin-top: 3px;' id='BandInput' placeHolder="Band Number"/>
+											    		    	</td
+											    		    </tr>
+											    			</table>
+															</td>
+															<td style = "width:40%;border:0;padding-right:10px">
+																<table style="width:100%">
+																	<tr>
+																		<td style = "width:25%;text-align:right;font-size:20px">Cust No.<td>
+																		<td style = "width:75%">
+											    		    		<span style='margin-top: 3px;text-align:right;font-size:20px;' id='CustNo'/></span>
+											    		    	</td
+											    		    </tr>
+											    			</table>
+															</td>
+															<td style = "width:30%;border:0;padding-right:10px">
+																<div id="TaxationList" style = "width: 100%;"></div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr style = "border:0">
+												<td style = "width:100%">
+													<table style = "width:100%">
+														<tr>
+															<td style = "width:40%;border:0;padding-top:10px;padding-left:10px;">
+																<input type="checkbox" id="OnHold" name="On Hold" value="OnHold" style = "-moz-transform: scale(2);-webkit-transform: scale(2);padding: 10px;"><span style = "font-size: 20px;padding-left:10px;">Customer Account On Hold</span>
+															</td>
+															<td style = "width:40%;border:0;padding-top:10px;padding-right:10px;">
+																<input type="checkbox" id="Employee" name="Employee" value="Employee" style = "-moz-transform: scale(2);-webkit-transform: scale(2);padding: 10px;"><span style = "font-size: 20px;padding-left:10px;">Customer Is An Employee</span>
+															</td>
+															<td style = "width:20%;border:0;padding-top:10px;padding-right:10px;">
+																<input type="checkbox" id="HidePrice" name="HidePrice" value="HidePrice" style = "-moz-transform: scale(2);-webkit-transform: scale(2);padding: 10px;"><span style = "font-size: 20px;padding-left:10px;">Hide Price</span>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table style = "width:100%;padding-top:10px;padding-bottom:10px;border:1px solid black;padding-left:3px;padding-right:3px;min-height:150px">
+								<caption style = "text-align:left"><b>Tank Information</b></caption>
+								<tr style = "border:0">
+									<td style = "width:40%; vertical-align:top;border:0">
+										<table style = "width:100%" id="TankListTable">
+											<tr>
+												<td style = "width:100%; vertical-align:top; height:100%" id="TankInfoCell">
+													<div id="TankInfo"></div>
+													<div id="SingleTank"><span style="font-size:20px" id="TankLabel">Tank at Mailing Address</span></div>
+												</td>
+											</tr>
+										</table>							
+									</td>
+									<td style = "width:60%;vertical-align:top;border:0;padding-left:10px;">
+										<table id="TankInputTable" style="width:100%">
+											<tr>
+												<td style = "width:25%;text-align:right;padding-right:10px;font-size:20px">Access Code</td>
+												<td style = "width:25%">
+				  	    	    		<input style='margin-top: 3px;' id='AccessCodeInput' placeHolder="Access Code"/>
+				  	    	    	</td>
+												<td style = "width:50%;padding-left:20px;padding-right:50px">
+													<div id="FuelList" style = "width: 100%;"></div>
+				  	    	    	</td>
+				  	    	    </tr>
+											<tr>
+												<td style = "width:25%;text-align:right;padding-right:10px;font-size:20px">Capacity</td>
+												<td style = "width:25%">
+				  	    	    		<input style='margin-top: 3px;' id='CapacityInput' placeHolder="Capacity (L)"/>
+				  	    	    	</td>
+												<td style = "width:50%;padding-left:20px;padding-right:50px">
+													<div id="PositionList" style = "width: 100%;"></div>
+				  	    	    	</td>
+				  	    	    </tr>
+			 								<tr>
+												<td style = "width:25%;padding-right:10px">
+				  	    	    	</td>
+												<td style = "width:25%">
+				  	    	    	</td>
+												<td style = "width:50%;padding-left:20px;padding-right:50px">
+				  	    	    		<div id="RegionCodeList" style = "width: 100%;"></div>
+				  	    	    	</td>
+				  	    	    </tr>
+										</table>
+									</td>											
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style = "width:100%">
+							<table style = "width:100%;padding-top:10px;;border:1px solid black;padding-left:3px;padding-right:3px;min-height:160px">
+								<caption style = "text-align:left"><b>Fob Information</b></caption>
+								<tr style = "border:0">
+									<td style = "width:40%; vertical-align:top;border:0" id="FobListCell">
+										<table style = "width:100%;height:100%;" id="FobListTable">
+											<tr>
+												<td style = "width:80%;height:100%" id="FobListCell">
+													<div id="FobList" style = "width: 100%;"></div>
+												</td>
+												<td style = "width:20%">
+				       						<button style="margin: 3px; padding:4px 4px; font-size: 16px; border-radius: 5px;" id="RemoveFob">Remove Fob(s)</button>
+				       					</td>
+				       				</tr>
+				       			</table
+									</td>
+									<td style = "width:60%;border:0;padding-left:10px;vertical-align:top">
+										<table style = "width:100%" id="FobInputTable">
+											<tr>
+												<td style = "width:35%;text-align:right;font-size:20px">Fob Number</td>
+												<td style = "width:65%">
+						    	    		<input style='margin-top: 3px;width:350px;' id='FobNumberInput' placeHolder="Fob #" maxlength = "45"/>
+						    	    	</td>
+						    	    </tr>
+											<tr>
+												<td style = "width:35%;text-align:right;font-size:20px">Fob Description</td>
+												<td style = "width:65%">
+						    	    		<input style='margin-top: 3px;width:350px;' id='FobDescInput' placeHolder="Fob Description" maxlength = "45"/>
+						    	    	</td>
+						    	    </tr>
+						    	    <tr>
+												<td style = "width:35%;text-align:right;font-size:20px">
+				       						<button style="margin: 3px; padding:4px 4px; font-size: 16px; border-radius: 5px;" id="AddFob">Add Fob</button>
+				       					</td>
+												<td style = "width:65%"></td>
+				       				</tr>
+				       			</table>
+									</td>
+								</tr>
+							</table>								
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td style = "width: 20%;background-color:#E0E0E0;">
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>	
+

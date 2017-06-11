@@ -1,0 +1,21 @@
+<h1>Listing mftrefunds</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @mftrefunds.each do |mftrefund| %>
+  <tr>
+    <td><%= link_to 'Show', mftrefund %></td>
+    <td><%= link_to 'Edit', edit_mftrefund_path(mftrefund) %></td>
+    <td><%= link_to 'Destroy', mftrefund, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Mftrefund', new_mftrefund_path %>

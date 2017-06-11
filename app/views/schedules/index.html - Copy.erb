@@ -1,0 +1,208 @@
+<html>
+
+	<link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css"/>
+	<script type="text/javascript" src="jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+	<script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+	<script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+	<script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+	<script type="text/javascript" src="jqwidgets/jqxdragdrop.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqxgrid.sort.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script>
+
+	<head>
+		<style type="text/css" media="screen">
+
+			.inner-day{
+				border:1px solid #999999;
+			}			
+
+			.date-header{
+				border:1px solid #CCCCCC;
+				height: 10%;
+			}			
+
+			.outer-day{
+				border:1px solid #CCCCCC;
+			}
+			
+			.daycontainer{
+				border:2px solid #ccc; 
+				width: 100%; 
+				height: 100%; 
+			}
+		</style>	
+	</head>
+	<body >
+		<script>
+			
+			tripList = [
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], [],
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], [],
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], [],
+				[], [], [], [ {'truck': '367'}, {'truck': '372'} ], [], [], [],
+				[ {'truck': '398'}], [], [], [], [], [], [],
+				[], [], [], [ {'truck': '367'}, {'truck': '372'}, {'truck': '367'}, {'truck': '395'}, {'truck': '399'}  ], [], [], [],
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], [],
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], [],
+				[], [ {'truck': '398'}, {'truck': '396'} ], [], [], [], [], []
+			];
+			
+			tripIndex = 28;
+			trips = [];
+			
+			anchorDate = new Date();
+			
+			var newtrips = JSON.parse('<%= @trips.html_safe %>');
+			var orderSource = JSON.parse('<%= @orders.html_safe %>');
+//			var orderSource = <%= @orders %>
+//			var orderSource = [ { "name": "Joe Blow", "shipTo": "123 Main", "product": "Jet", "quantity": 999},
+//													{ "name": "Bob Slob", "shipTo": "321 Main", "product": "Stove", "quantity": 123},
+//													{ "name": "Sue Blue", "shipTo": "999 Main", "product": "Diesel", "quantity": 321},
+//													{ "name": "Fred Zed",  "shipTo": "888 Main", "product": "Regular", "quantity": 555} ];
+			
+			$(document).ready (function () {
+				drawSched();
+//				$("#Orders").jqxListBox({ source: orderSource, width: '200px', height: '250px',});
+//				$("#Orders").jqxDragDrop();
+				var source =
+				{
+			    localdata: orderSource,
+			    datatype: "array"
+				};
+				var dataAdapter = new $.jqx.dataAdapter(source, {
+			    loadComplete: function (data) { },
+			    loadError: function (xhr, status, error) { }    
+				});
+			  var columns = [
+		        { text: 'ordernum', datafield: 'ordernum', width: 0, },
+		        { text: 'Name', datafield: 'name', width: ($(window).width() - 90) * 0.30, },
+		        { text: 'Ship To', datafield: 'shipTo', width: ($(window).width() - 90) * 0.23 },
+		        { text: 'Product', datafield: 'product', width: ($(window).width() - 90) * 0.20, },
+		        { text: 'Quantity', datafield: 'quantity', width: ($(window).width() - 90) * 0.10, },
+		        { text: 'Date', datafield: 'orderdate', width: ($(window).width() - 90) * 0.10, },
+		        { text: 'Intval', datafield: 'interval', width: ($(window).width() - 90) * 0.05, },
+			    ];
+				$("#Orders").jqxGrid(
+				{
+			    source: dataAdapter,
+			    width: $(window).width() - 90,
+//			    autoheight: true,
+					height: '100%',
+			    sortable: true,
+			    columns: columns
+				});
+				$("#Orders").jqxGrid('hideColumn','ordernum');
+//				$("#Orders").jqxListBox({ source: orderSource, width: '100%', height: '100%', allowDrag: true});
+//				$(".jqx-lisitem-element").jqxDragDrop();
+					$(".jqx-grid-cell").jqxDragDrop();
+			});
+			
+			function drawSchedNew() {
+				tripSublist = tripList.slice(tripIndex,tripIndex + 7);
+				trips = tripSublist;
+				$("#schedContainer").html("<table id='schedContainer' style='height: 100%;'><tr id='schedRow'></tr></table>");
+				for(dayIndex=0;dayIndex<7;dayIndex++) {
+					$("#schedRow").html($("#schedRow").html() + "<td><table style='height: 100%;'><tr><td><table class='inner-day' style='height: 100%;'><tr><td class='date-header'>" + 
+																addDays(anchorDate,dayIndex).toDateString() + '<tr><td style="vertical-align: top;"><div id="trips' + dayIndex + '"></div></td></tr>' +
+																"</td></tr></table></td></tr></table></td>");
+					tripHtml(tripSublist[dayIndex],dayIndex);
+				}
+			}
+			
+			function drawSched() {
+				tripSublist = tripList.slice(tripIndex,tripIndex + 7);
+				$("#schedContainer").html("<table id='schedContainer' style='height: 100%;'><tr id='schedRow'></tr></table>");
+				for(dayIndex=0;dayIndex<7;dayIndex++) {
+					$("#schedRow").html($("#schedRow").html() + "<td><table style='height: 100%;'><tr><td><table class='inner-day' style='height: 100%;'><tr><td class='date-header'>" + 
+																addDays(anchorDate,dayIndex).toDateString() + '<tr><td style="vertical-align: top;"><div style="overflow-y: scroll; height: 100%;">' + tripHtml(tripSublist[dayIndex]) + "</div></td></tr>" +
+																"</td></tr></table></td></tr></table></td>");
+				}
+			}
+			
+			function addDays(dateStart,increment) {
+				return new Date(dateStart.getTime() + increment * 1000 * 60 * 60 * 24);
+			}
+
+			function addOrderToTrip(trip,order) {
+				if(trip['orders'] == null)
+					trip['orders'] = [];
+				trip['orders'].push(order);
+			}
+						
+			function tripHtml(trips) {
+				tableTag = '<table style="display: block;">';
+				ret = tableTag;
+				i = 0;
+				trips.forEach (function(trip) {
+//			 		ret = ret + "<tr><td style='height: 50px; background-color:red;'>Truck: " + trip['truck'] + "</td></tr>"
+//			 		ret = ret + "<tr><td style='height: 50px; vertical-align: top;'><button style='background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); height: 100%; width: 100%;' onclick='selectTrip(' +  + ');'>Truck: " + trip['truck'] + "</button></td></tr>"
+			 		ret = ret + "<tr><td style='height: 50px; vertical-align: top;'><button style='background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); height: 100%; width: 100%;'>Truck: " + trip['truck'] + "</button></td></tr>"
+			 	});
+//			 	ret = ret + "<tr><td style='height: 50px; background-color:blue'>New Trip</td></tr>";
+			 	ret = ret + "<tr><td style='height: 50px;'><button style='background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); height: 100%; width: 100%;'>New Trip</button></td></tr>";
+			 	ret = ret + '</table>';
+			 	d = addDays(anchorDate,dayIndex);
+//		 		console.log(d.getFullYear() + '' + zeroPad((d.getMonth() + 1),2) + '' + zeroPad(d.getDay(),2));
+			 	return ret;
+			}
+
+			function zeroPad(num, places) {
+			  var zero = places - num.toString().length + 1;
+			  return Array(+(zero > 0 && zero)).join("0") + num;
+			}
+			
+			function selectTrip(tripDate,index) {
+			}
+			
+			function past(days) { 
+				anchorDate = addDays(anchorDate,0-days);
+				tripIndex = tripIndex - days;
+				drawSched();
+			}
+			
+			function future(days) { 
+				anchorDate = addDays(anchorDate,days);
+				tripIndex = tripIndex +	 days;
+				drawSched();
+			}
+
+		</script>
+		<div id="root" style="height: 100%">
+			<div style="height: 25%; width: 100%;">
+				<table style="height: 100%; width: 100%;">
+					<tr>
+						<td style="width: 100%; padding: 0px; height: 100%;"><div id="Orders"></div></td>
+					</tr>
+					<tr>
+						<td style="width: 40%;"><button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" onclick="past(7);"><<</button><button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" onclick="past(1);"><</button><button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" onclick="future(1);">></button><button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" onclick="future(7);">>></button></td>
+					</tr>
+				</table>
+			</div>
+			<div id="schedDiv" style="height: 50%;">
+				<table style="height: 100%;">
+					<tr>
+						<td style="width: 85%; padding: 0px; height: 100%;"><div id="schedContainer" style="width: 100%; margin: 0px; padding: 0px; height: 100%;"></div></td>
+					</tr>
+				</table>
+			</div>
+			<div style="height: 25%;">
+				<table style="height: 100%; width: 100%; border: 1px solid #999999;">
+					<tr style="height: 100%; width: 100%; border: 1px;">
+						<td  style="height: 100%; width: 100%; border: 1px;" id="truckcell">Truck:<input type="text" name="truck">
+						</td>
+						<td  style="height: 100%; width: 100%; border: 1px;" id="datecell">
+						</td>
+					</tr>
+					<tr>
+						<td id="triporderscell"><div id="triporders"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

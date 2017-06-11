@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>Customer order management</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.css" type="text/css" />
+    <link rel="stylesheet" href="css/theme1.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+	  <script type="text/javascript" src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.columnsresize.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdropdownlist.js"></script>
+		<script type="text/javascript" src="../../jqwidgets/jqxdatetimeinput.js"></script>
+		<script type="text/javascript" src="../../jqwidgets/jqxcalendar.js"></script>
+		<script type="text/javascript" src="../../jqwidgets/globalization/globalize.js">
+    <script type="text/javascript" src="js/spin.js"></script>
+    
+		<style>
+			.ui-dialog-titlebar
+			{
+				background-color: #BBC8F9;
+				border-top-color: #BBC8F9;
+				border-left-color: #BBC8F9;
+				border-right-color: #BBC8F9;
+				border-bottom-color: #BBC8F9;
+				border: #FFFFFF;
+				background: -webkit-gradient(linear, left top, left bottom, from(#bbc8f9), to(#fff));
+			}
+			
+			.ui-widget input,
+			.ui-widget select,
+			.ui-widget textarea,
+			.ui-widget button {
+				font-size: 20px;
+			}
+			
+			.jqx-tabs-title,
+			.jqx-tabs-header
+			{
+			 font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif,
+			 font-size: 20px,
+			 font-style: normal
+			}			
+			
+		</style>
+	
+		<% @title="Customer Order Management" %>
+		
+    <script type="text/javascript" src="js/orders.js"></script>
+    
+    <script type="text/javascript">
+
+      var theme = 'theme1';
+			var data = '<%= @customers.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+			var custList = onlyAccessCoded(JSON.parse(data)).sort(custSortFunc);
+			
+      $(document).ready(function () {
+				createCustomerList(custList);
+				
+				initializeShipToDialog();
+				initializeAlertDialog();
+				
+				$("#InfoTable").hide();
+     	});
+        
+    </script>
+</head>
+
+<body class='default'>
+<div id='root' class="ui-widget">
+	<table style="width:100%;height:100%;"">
+	<caption style = "text-align:center;font-size:20px"><b>Customer Order Management</b></caption>
+		<tr style="height: 10%">
+			<td style = "width: 10%"></td>
+			<td style = "width: 80%">
+				<div id = "CustomerList"></div>
+			</td>
+			<td style = "width: 10%"></td>
+		</tr>
+		<tr style="height: 80%">
+			<td style = "width: 10%"></td>
+			<td style = "width: 80%">
+				<table style="width:100%;height:100%" id="InfoTable">
+					<tr>
+						<td style = "width:10%">
+							<table style="width: 100%;border:1px solid black;margin:25px 0px 25px;background-color:#F0F0F0;">
+							<caption style = "text-align:center;font-size:20px;font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;"><b>Location Details</b></caption>
+								<tr>
+									<td>
+										<span id="FuelType" style="font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;font-size: 20px;font-style: normal;"></span>
+									</td>
+									<td>
+										<span id="AccessCode" style="font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;font-size: 20px;font-style: normal;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<span id="TankPosition" style="font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;font-size: 20px;font-style: normal;"></span>
+									</td>
+									<td>
+										<span id="TankCapacity" style="font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;font-size: 20px;font-style: normal;"></span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<span id="RegionCode" style="font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;font-size: 20px;font-style: normal;"></span>
+									</td>
+									<td></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style = "width:100%">
+							<table style="width:100%;height:100%;margin:25px 0px 25px;">
+							<caption style = "text-align:center;font-size:20px;font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;"><b>Order Status</b></caption>
+								<tr>
+									<td style = "width:100%">
+										<div id = "OrdersContainer">
+											<ul>
+												<li>New Order</li>
+											</ul>
+											<div>New Order</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style = "width:100%">
+							<table style="width:100%;height:100%;margin:25px 0px 25px;">
+							<caption style = "text-align:center;font-size:20px;font-family: 'Trebuchet MS', Tahoma, Verdana, Arial, sans-serif;"><b>Order History</b></caption>
+								<tr>
+									<td style = "width:100%">
+										<div id = "History"></div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>						
+			</td>
+			<td style = "width: 10%"></td>
+		</tr>
+	</table>
+</div>
+<div id="ShipToDialog" style="height: 100%; padding: 0; margins: 0;">
+	<table style = "height:100%;width:100%">
+		<tr style = "height:100%">
+			<td style = "width:100%" id="ShipToCell"><div id="ShipToList"></div></td>
+		</tr>
+	</table>
+</div>
+<div id="AlertDialog" style="height: 100%; padding: 0; margins: 0;">
+	<table style = "height:100%;width:100%">
+		<tr style = "height:100%">
+			<td style = "width:15%"></td>
+			<td style = "width:70%">
+				<table>			
+					<tr>
+						<td style = "font-size: 16px;"><span id="AlertMsg"></span></td>
+					</tr>
+				</table>
+			</td>
+			<td style = "width:15%"></td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

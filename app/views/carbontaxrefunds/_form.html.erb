@@ -1,0 +1,17 @@
+<%= form_for(@carbontaxrefund) do |f| %>
+  <% if @carbontaxrefund.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@carbontaxrefund.errors.count, "error") %> prohibited this carbontaxrefund from being saved:</h2>
+
+      <ul>
+      <% @carbontaxrefund.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<%= form_for(@mftrefund) do |f| %>
+  <% if @mftrefund.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@mftrefund.errors.count, "error") %> prohibited this mftrefund from being saved:</h2>
+
+      <ul>
+      <% @mftrefund.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

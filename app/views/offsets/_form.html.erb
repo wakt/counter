@@ -1,0 +1,17 @@
+<%= form_for(@offset) do |f| %>
+  <% if @offset.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@offset.errors.count, "error") %> prohibited this offset from being saved:</h2>
+
+      <ul>
+      <% @offset.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

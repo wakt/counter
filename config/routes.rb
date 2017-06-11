@@ -1,4 +1,40 @@
 Counter::Application.routes.draw do
+  resources :days
+
+
+  resources :orders
+
+
+  resources :fuelprices
+
+
+  resources :offsets
+
+
+  resources :rackprices
+
+
+  resources :customers
+
+
+  resources :mftrefunds
+
+
+  resources :carbontaxrefunds
+
+
+  resources :taxdetails
+
+
+  resources :ramcards
+
+
+  resources :manifests
+
+
+  resources :schedules
+
+
   resources :carts
 
 

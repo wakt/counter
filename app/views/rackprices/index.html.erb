@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>The front counter app</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.css" type="text/css" />
+    <link rel="stylesheet" href="css/theme1.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+	  <script type="text/javascript" src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmaskedinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdropdownlist.js"></script>
+		<script type="text/javascript" src="../../jqwidgets/jqxchart.js"></script>
+		<script type="text/javascript" src="../../jqwidgets/jqxnumberinput.js"></script>
+
+    <script type="text/javascript" src="js/spin.js"></script>
+    
+  		<style>
+			.ui-dialog-titlebar
+			{
+				background-color: #BBC8F9;
+				border-top-color: #BBC8F9;
+				border-left-color: #BBC8F9;
+				border-right-color: #BBC8F9;
+				border-bottom-color: #BBC8F9;
+				border: #FFFFFF;
+				background: -webkit-gradient(linear, left top, left bottom, from(#bbc8f9), to(#fff));
+			}
+			
+			.ui-widget input,
+			.ui-widget select,
+			.ui-widget textarea,
+			.ui-widget button {
+				font-size: 20px;
+			}
+			
+		</style>
+	
+		<% @title="Fast Fuels Rack Price Management" %>
+		
+    <script type="text/javascript" src="js/rackprices.js"></script>
+    
+    <script type="text/javascript">
+
+      var theme = 'theme1';
+			var rackprices = '<%= @rackprices.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+			var rackobj = JSON.parse(rackprices);
+
+      $(document).ready(function () {
+      	createChart(createChartSource(rackobj));
+//      	createRackGrid(createChartSource(rackobj));
+//      	createRackGrid();
+      	createScrollableRackGrid();
+      	
+      	initializePriceDialog();
+      	initializeConfirmDialog();
+      	initializeAlertDialog();
+     	});
+        
+    </script>
+</head>
+
+<body>
+	<div id="root" style = "width:100%">
+	
+		<table style="width:100%">
+			<caption style = "text-align:middle;font-size:20px;"><b>Fast Fuels Rack Price Management</b></caption>
+			<tr>
+				<td style="width:20%"></td>
+				<td style="width:60%;padding-top: 20px">
+					<table style = "width:100%">
+						<tr>
+							<td style="width:100%">
+			  				<div style="margin: 0px; padding: 0px; width: 100%;" id="RackGrid"><div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td style="width:20%"></td>
+			</tr>
+			<tr>
+				<td style="width:20%"></td>
+				<td style="width:60%;padding-top: 20px">
+					<div style="width:100%;height:500px" id="Chart">
+					</div>
+				</td>
+				<td style="width:20%"></td>
+			</tr>
+		</table>				
+
+	</div>
+	<div id="PriceDialog" style="height: 100%; padding: 0; margins: 0;">
+		<table style = "height:100%;width:100%">
+			<tr style = "height:20%"></tr>
+			<tr style = "height:60%">
+				<td style = "width:15%"></td>
+				<td style = "width:70%">
+					<table>			
+						<tr>
+							<td style = "font-size: 16px;">Enter rack price for:</td>
+						</tr>
+						<tr>
+							<td style = "font-size: 16px;" id="DialogProduct"></td>
+						</tr>
+						<tr>
+							<td style = "font-size: 16px;">on: <span style = "font-size: 16px;" id="DialogDate"></span></td>
+						</tr>
+					</table>
+				</td>
+				<td style = "width:15%"></td>
+			</tr>
+			<tr style = "height:20%">
+				<td style = "width:15%"></td>
+				<td style = "width:70%">
+					<input type="text" id="PriceInput" style="text-align: right;" ></input>
+				</td>
+				<td style = "width:15%"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="ConfirmDialog" style="height: 100%; padding: 0; margins: 0;">
+		<table style = "height:100%;width:100%">
+			<tr style = "height:100%">
+				<td style = "width:15%"></td>
+				<td style = "width:70%">
+					<table>			
+						<tr>
+							<td style = "font-size: 16px;">Price of: <span id="ConfirmPrice"></span> already exists for:</td>
+						</tr>
+						<tr>
+							<td style = "font-size: 16px;" id="ConfirmProduct"></td>
+						</tr>
+						<tr>
+							<td style = "font-size: 16px;">on: <span style = "font-size: 16px;" id="ConfirmDate"></span></td>
+						</tr>
+						<tr>
+							<td style = "font-size: 16px;">Do you want to change it?</td>
+						</tr>
+					</table>
+				</td>
+				<td style = "width:15%"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="AlertDialog" style="height: 100%; padding: 0; margins: 0;">
+		<table style = "height:100%;width:100%">
+			<tr style = "height:100%">
+				<td style = "width:15%"></td>
+				<td style = "width:70%">
+					<table>			
+						<tr>
+							<td style = "font-size: 16px;"><span id="AlertMsg"></span></td>
+						</tr>
+					</table>
+				</td>
+				<td style = "width:15%"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+
+</html>

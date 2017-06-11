@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css"/>
+		<script type="text/javascript" src="jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxdatetimeinput.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxcalendar.js"></script>
+		<script type="text/javascript" src="jqwidgets/globalization/globalize.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+	    $(document).ready(function () {
+//	    	console.log(startdate);	
+	        $("#startdate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'yyyy/MM/dd' });
+	        $("#enddate").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'yyyy/MM/dd' });
+
+			    $('input[type*="button"]').click(function(){
+				    var url = $(this).attr('data-url');
+						$('#form1').attr('action',url);   
+						document.forms["form1"].submit();
+			    });
+	    });
+
+		</script>
+
+		<form method="POST" id="form1">
+			<div id='root'>
+				<table style="width: 100%;" >
+					<tr>
+						<td style="width: 75%;">
+							<div styl="width: 100%;">	
+							<table style="width: 100%;">
+								<tr>
+									<td>
+										<b>Start Date</b>
+									</td>
+									<td>
+										<b>End Date</b>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id='startdate'></div>
+									</td>
+									<td>
+										<div id='enddate'></div>
+									</td>
+								</tr>
+							</table>
+							</div>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										<input type="button" data-url="/taxdetails" style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); width: 250px; height: 35px; border-radius: 8px;" id="Report" value="View Detail Report">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="button" data-url="/mftrefunds" style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); width: 250px; height: 35px; border-radius: 8px;" id="Report" value="View MFT Refund Report">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="button" data-url="/carbontaxrefunds" style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9); width: 250px; height: 35px; border-radius: 8px;" id="Report" value="View Carbon Tax Refund Report">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</body>
+</html>

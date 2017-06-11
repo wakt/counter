@@ -1,0 +1,21 @@
+<h1>Listing manifests</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @manifests.each do |manifest| %>
+  <tr>
+    <td><%= link_to 'Show', manifest %></td>
+    <td><%= link_to 'Edit', edit_manifest_path(manifest) %></td>
+    <td><%= link_to 'Destroy', manifest, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Manifest', new_manifest_path %>

@@ -1,0 +1,21 @@
+<h1>Listing carbontaxrefunds</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @carbontaxrefunds.each do |carbontaxrefund| %>
+  <tr>
+    <td><%= link_to 'Show', carbontaxrefund %></td>
+    <td><%= link_to 'Edit', edit_carbontaxrefund_path(carbontaxrefund) %></td>
+    <td><%= link_to 'Destroy', carbontaxrefund, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Carbontaxrefund', new_carbontaxrefund_path %>

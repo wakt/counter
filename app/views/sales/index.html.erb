@@ -21,6 +21,7 @@
     <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxinput.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxnumberinput.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxmaskedinput.js"></script>
     <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
@@ -48,7 +49,7 @@
 			
 		</style>
 	
-		<% @title="Fast Fuels" %>
+		<% @title="Fast Fuels Sales" %>
 		
     <script type="text/javascript" src="js/fastfuels.js"></script>
     
@@ -69,6 +70,8 @@
 
 					createProductTabs(theme);
 
+					createNoteInput(theme);
+
 					createBandInput(theme);
 					
           createFuelButtons(theme);
@@ -82,6 +85,11 @@
           var miscellaneousItemDataAdapter = new $.jqx.dataAdapter(miscellaneousItemSource);
 					createMiscellaneousItemListBox(miscellaneousItemDataAdapter,theme);
 					miscellaneousItemDataAdapter.dataBind();
+
+					var homeHeatSource = createItemSource(items[3]);
+          var homeHeatDataAdapter = new $.jqx.dataAdapter(homeHeatSource);
+					createHomeHeatListBox(homeHeatDataAdapter,theme);
+					homeHeatDataAdapter.dataBind();
 
 					initializeItemDialog();
 					initializePostDialog();
@@ -120,8 +128,13 @@
 			           		Account</button>
     						</div>
 			    		</td>
+			    		<td>
+			    			<div >
+  	    	    		<input style='margin-top: 3px;' id='NoteInput' placeHolder="Note"/>
+  	    	    	</div>
+  	    	    </td>
     					<td>
-	    					<div>
+	    					<div >
   	    	    		<input style='margin-top: 3px;' id='BandInput' placeHolder="Band Number"/>
 								</div>
 							</td>
@@ -141,6 +154,7 @@
   			      <li>Fuel</li>
     	  		  <li>Oil/Lube</li>
       	  		<li>Misc.</li>
+      	  		<li>Home Heat</li>
 			  	  </ul>
     				<div style='width: 100%;'>
     					<table style='width: 100%;'>
@@ -162,11 +176,22 @@
 	    					</tr>
 							</table>
 			    	</div>
-  			  	<div>
+  			  	<div id="MiscTab" >
 							<table style="width: 100%">
 								<tr style="width: 100%">
 									<td style = "width: 100%" >
 			    					<div id='MiscList' style="font-size: 32px; float: left; width: 100%;" >
+			    					</div>
+		    					</td>
+	    					</tr>
+							</table>
+	    			</div>
+
+  			  	<div id="HeatTab" >
+							<table style="width: 100%;">
+								<tr style="width: 100;%">
+									<td style = "width: 100%;" >
+			    					<div id='HeatList' style="font-size: 32px; float: left; width: 100%;" >
 			    					</div>
 		    					</td>
 	    					</tr>

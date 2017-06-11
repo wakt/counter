@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	
+	  <title id='Description'>Delivery Scheduling</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css"/>
+		<script type="text/javascript" src="jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+	  <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+		<script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+		<script type="text/javascript" src="jqwidgets/jqxdragdrop.js"></script>
+	  <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+	  <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+	  <script type="text/javascript" src="jqwidgets/jqxgrid.sort.js"></script>
+	  <script type="text/javascript" src="jqwidgets/jqxmenu.js"></script>
+	
+		<% @title="Fast Fuels Dispatch" %>
+	
+		<style type="text/css" media="screen">
+
+			.inner-day{
+				border:1px solid #999999;
+			}			
+
+			.date-header{
+				border:1px solid #CCCCCC;
+				text-align: center;
+			}			
+
+			.outer-day{
+				border:1px solid #CCCCCC;
+			}
+			
+			.daycontainer{
+				border:2px solid #ccc; 
+				width: 100%; 
+				height: 100%; 
+			}
+			
+			.selectedbutton{
+				background-image: -webkit-linear-gradient(top, #66AAFF, #FFFFFF);
+				color: #CC0000;
+				font-style: bold;
+			}
+			
+			.unselectedbutton{
+				background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9)
+			}
+			
+		</style>	
+	</head>
+	<body>
+		<script>
+//			anchorDate = new Date();
+			
+			var trips = JSON.parse('<%= @trips.html_safe %>');
+			var orderSource = JSON.parse('<%= @orders.gsub(/'/,"'" => "\\'").html_safe %>');
+			var tripids = [];
+
+			$(document).ready (function () {
+				Array.prototype.move = function(from, to) {
+				    this.splice(to, 0, this.splice(from, 1)[0]);
+				};
+				drawSched();
+				createOutstandingOrderGrid();
+				showTripDetails(trips[0]['trips'][0]);
+			});
+
+		</script>
+					
+    <script type="text/javascript" src="js/dispatch.js"></script>
+		<div id="root" style="height:100%">
+			<table style="height: 100%; width: 100%;">
+				<tr style="width: 100%;">
+					<td style="height: 100%; width: 100%;">
+						<div style="height: 100%; width: 100%;">
+							<table style="height: 100%; width: 100%;">
+								<tr>
+									<td style="width: 100%; padding: 0px; height: 100%;"><div id="Orders" style="margins: 0px; width: 100%;"></div></td>
+								</tr>
+								<tr>
+									<td style="width: 40%;">
+										<span style="float: left;">
+											<button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="lastWeek"><<</button>
+											<button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="lastDay"><</button>
+											<button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="nextDay">></button>
+											<button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="nextWeek">>></button>
+										</span>
+										<span style="float: right;">
+											<button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="ramcard" onclick="ramcard();">Ramcard</button>
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr style="width: 100%;">
+					<td style="height: 100%; width: 100%;">
+						<div id="schedDiv">
+							<table style="width: 100%;">
+								<tr>
+									<td style="width: 100%; padding: 0px;"><div id="schedContainer" style="width: 100%; margin: 0px; padding: 0px;"></div></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr style="width: 100%;">
+					<td style="height: 100%; width: 100%;">
+						<div style="height: 100%;">
+							<table style="height: 100%; width: 100%; border: 1px solid #999999;">
+								<tr style="height: 20%; width: 100%; border: 1px;">
+									<td>
+										<table style="height: 100%; width: 100%;">
+											<tr style="height: 100%; width: 100%;">
+												<td  style="height: 100%; width:30%; border: 1px;" id="truckcell">Truck:<input type="text" name="truck" placeholder="Unassigned" id="truck">
+												</td>
+												<td  style="height: 100%; width:30%; border: 1px;" id="drivercell">Driver:<input type="text" name="driver" placeholder="Unassigned" id="driver">
+												</td>
+												<td  style="height: 100%; width:30%; border: 1px;" id="datecell">
+												</td>
+												<td  style="height: 100%; width:10%; border: 1px;">
+													<table>
+														<tr>
+															<td><button style="background-image: -webkit-linear-gradient(top, #E8E8E8, #BBC8F9);" id="manifest">Manifest</button></td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr style="height: 80%; width: 100%; border: 1px;">
+									<td id="triporderscell" style="height: 100%;"><div id="triporders" style'"height: 100%;"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					</td>
+				</tr>
+			</table>
+	</body>
+</html>

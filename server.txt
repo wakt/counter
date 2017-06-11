@@ -1,0 +1,26 @@
+=> Booting WEBrick
+=> Rails 3.2.13 application starting in development on http://0.0.0.0:80
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+
+
+Started POST "/ramcards" for 192.168.1.111 at 2013-10-22 09:41:58 -0700
+
+SyntaxError (C:/Users/dan/counter/app/models/cart.rb:147: syntax error, unexpected ',', expecting ')'
+C:/Users/dan/counter/app/models/cart.rb:165: syntax error, unexpected tSYMBEG, expecting '}'
+	 		 										:amount =>  "%.02f" % ( (tax['...
+	 		 										 ^
+C:/Users/dan/counter/app/models/cart.rb:168: syntax error, unexpected ',', expecting '}'
+				 		 								application['ratio'].to_f)} } } } },	
+				 		 								                                    ^
+C:/Users/dan/counter/app/models/cart.rb:169: syntax error, unexpected ',', expecting '}'
+C:/Users/dan/counter/app/models/cart.rb:338: syntax error, unexpected keyword_end, expecting '}'):
+  app/models/ramcard.rb:3:in `<top (required)>'
+  app/controllers/ramcards_controller.rb:1:in `<top (required)>'
+
+
+  Rendered C:/Ruby193/lib/ruby/gems/1.9.1/gems/actionpack-3.2.13/lib/action_dispatch/middleware/templates/rescues/_trace.erb (0.0ms)
+  Rendered C:/Ruby193/lib/ruby/gems/1.9.1/gems/actionpack-3.2.13/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (0.0ms)
+  Rendered C:/Ruby193/lib/ruby/gems/1.9.1/gems/actionpack-3.2.13/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (30.0ms)
+Exiting
+Terminate batch job (Y/N)? 

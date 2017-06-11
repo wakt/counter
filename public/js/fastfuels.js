@@ -4,7 +4,9 @@
 			var cart = {};
 			cart[ 'items' ] = [];
 			var lastBand = '';
+			var lastNote = '';
 			var lastCust = '';
+			var lastPriceList = '1';
 			var quantity = '';
 			var quantitydecimals = 0;
 			var lastquantity = '';
@@ -70,7 +72,8 @@
     	}
     	
     	function selectItemByName(section,name) {
-    		(section == 1 ? $("#ItemList") : $("#MiscList") ).jqxListBox("selectIndex", findItemIndexByName(section,name));
+    		getList().jqxListBox("selectIndex", findItemIndexByName(section,name));
+//    		(section == 1 ? $("#ItemList") : $("#MiscList") ).jqxListBox("selectIndex", findItemIndexByName(section,name));
     	}
     	
     	function createCustomerSource(data) {
@@ -85,7 +88,8 @@
       			{ name: 'sProvState' }, 
       			{ name: 'spostalzip' }, 
       			{ name: 'band' }, 
-      			{ name: 'drCrLimit' }
+      			{ name: 'drCrLimit' },
+      			{ name: 'priceList' }
 					],
 					data: "",
 					id: 'sName'
@@ -139,6 +143,7 @@
   					itemClickTime = +new Date();
 				    var args = event.args;
 				    if (args) {
+				    	refresh = false;
 				    	var cust = findCustomer(args.item.originalItem['lId']);
               if (cust != null) {
               	if(cust['drCrLimit'] > 0) {
@@ -150,6 +155,8 @@
               		$("#OnAccount").hide();
               	}
 
+             		$("#NoteInput").jqxMaskedInput('clear');
+
               	if(cust['band'].length > 0) {
               		$("#BandInput").jqxMaskedInput('val',cust['band']);
               	}
@@ -160,10 +167,20 @@
 				     		cart[ 'customerName'] = $("#custCombo").jqxComboBox('val');
 				    		cart[ 'band' ] = cust['band'];
 				    		cart[ 'payment' ] = $("#PaymentButtons").jqxButtonGroup('getSelection');
-
+//				    		cart[ 'priceList' ] = cust['priceList'];
+//				    		if(lastPriceList != cust['priceList']) {
+//				    			refresh = true;
+//				    		}
+//				    		console.log('priceList change due to select');
+			
 			     			if(cart[ 'items' ].length > 0) {
 	              	$("#InvoiceButton").show();
 	              }
+	              
+//	              if(refresh) {
+//	              	refreshCart();
+//	              	lastPriceList = cust['priceList'];
+//	              }
               }
 						}
 				}); 			
@@ -172,18 +189,19 @@
 				$('#custCombo').on('change', function (event)
 				{
 					if(args.item && args.item.originalItem) {
+						var refresh = false;
 						if(args.item.originalItem.sName.match(new RegExp('.*cash sale*.','i'))) {
 							if($("#BandInput").is(':visible')) {
 								$("#BandInput").hide();
 								cart ['band'] = '';
-								if(cart[ 'items' ].length > 0) refreshCart();
+								if(cart[ 'items' ].length > 0) refresh = true;
 							}
 						}
 						else {
 							if($("#BandInput").not(':visible')) {
 									$("#BandInput").show();
 									cart ['band'] = $("#BandInput").jqxMaskedInput('val');
-									if(cart[ 'items' ].length > 0) refreshCart();
+									if(cart[ 'items' ].length > 0) refresh = true;
 							}
 						}
 					}
@@ -202,10 +220,23 @@
 	     		cart[ 'customerName'] = $("#custCombo").jqxComboBox('val');
 	    		cart[ 'band' ] = $("#BandInput").is(":visible") ? $("#BandInput").jqxMaskedInput('val') : '';
 	    		cart[ 'payment' ] = $("#PaymentButtons").jqxButtonGroup('getSelection');
+	    		if($("#custCombo").jqxComboBox('selectedIndex') > 0) {
+			    	var cust = findCustomer(args.item.originalItem['lId']);
+		    		cart[ 'priceList' ] = cust['priceList'];
+		    	} else {
+		    		cart[ 'priceList' ] = '1';
+		    	}
+		    	if(lastPriceList != cart['priceList']) {
+		    		refresh = true;
+		    	}
+	    		console.log('priceList change due to change');
+	    		console.log($("#custCombo").jqxComboBox('selectedIndex'));
 
      			if(cart[ 'items' ].length > 0) {
           	$("#InvoiceButton").show();
           }
+          
+          if(refresh) refreshCart();
 				} );
 				
     	}
@@ -226,8 +257,19 @@
 			function createProductTabs(theme) {
 		    $('#jqxTabs').jqxTabs({ width: '100%', height: 300, scrollable: false, theme: theme	});
 //		    $('#TabList').append('<li style="float: left; position: static; height: 18px;"><div style="float: left; margin-top: 0px;"><table><tr><td style="width: 30%;"></td><td style="width: 30%;"><input type="button" value="Invoice" id="InvoiceButton" /></td><td style="width: 30%;"></td></div></li>');
-		    $('#TabList').append('<li class="jqx-reset jqx-disableselect jqx-tabs-title jqx-tabs-title-theme1 jqx-item jqx-item-theme1 jqx-rc-t jqx-rc-t-theme1" style="float: left; position: static; height: 30px; margin: 0px; padding: 0px; border: 0px;"><table style="width: 450px;"><tr><td style="width: 200px;"></td><td style="width: 30%; padding: 0px; height 100%;"><input type="button" value="Print Invoice" id="InvoiceButton" style="margin: 0px; height: 20px; padding: 0px; font-size: 20px; vertical-align: middle;"/></td></tr></table></li>');
+//		    $('#TabList').append('<li class="jqx-reset jqx-disableselect jqx-tabs-title jqx-tabs-title-theme1 jqx-item jqx-item-theme1 jqx-rc-t jqx-rc-t-theme1" style="float: left; position: static; height: 30px; margin: 0px; padding: 0px; border: 0px;"><table style="width: 450px;"><tr><td style="width: 200px;"></td><td style="width: 30%; padding: 0px; height 100%;"><input type="button" value="Print Invoice" id="InvoiceButton" style="margin: 0px; height: 20px; padding: 0px; font-size: 20px; vertical-align: middle;"/></td></tr></table></li>');
 //		    $('#TabList').append('<li class="jqx-reset jqx-disableselect jqx-tabs-title jqx-tabs-title-theme1 jqx-item jqx-item-theme1 jqx-rc-t jqx-rc-t-theme1" style="float: left; position: static; height: 18px;"><input type="button" value="Invoice" id="InvoiceButton" /></li>');
+//				console.log("left: " + $(".jqx-tabs-headerWrapper").position().left);
+//				console.log("top: " + $(".jqx-tabs-headerWrapper").position().top);
+				$("#TabList").append('<div id="divinvoicebutton" style="position: absolute; z-index: 99999999;height: 35px;width: 450px;top: 0px;left: ' + 
+				($("#jqxTabs").position().left + $("#jqxTabs").width() - 500) + 'px;">' +
+				'<table style="width: 100%;height: 100%; z-index: 99999999;top: ' +
+//				($(".jqx-tabs-headerWrapper").height() - 20)/2 + 
+				'0px;"><tr><td style="width: 200px;"></td><td style="width: 30%; padding: 0px; height 100%;"><input type="button" value="Print Invoice" id="InvoiceButton" style="margin: 0px; height: 20px; padding: 0px; font-size: 20px; vertical-align: middle; z-index: 99999999;"/></td></tr></table>' +
+				"</div>");
+//				console.log("left: " + $("#divinvoicebutton").position().left);
+//				console.log("top: " + $("#divinvoicebutton").position().top);
+
 			}
 			
 			function createBandInput(theme) {
@@ -241,6 +283,20 @@
 //	     			console.log('band status change');
 	     		}
 	     		lastBand = $("#BandInput").jqxMaskedInput('val');
+        } ) ;
+			}			
+				
+			function createNoteInput(theme) {
+        $("#NoteInput").jqxInput({ width: 150, height: 25, theme: theme, rtl: false });
+        $("#NoteInput").on('valuechanged', function(event) {
+     			if( ( ( $("#NoteInput").jqxInput('val').length > 0 && lastNote.length == 0 ) ||
+     						( $("#NoteInput").jqxInput('val').length == 0 && lastNote.length > 0 ) ) &&
+     					cart[ 'items' ].length > 0) {
+		    		cart[ 'comment' ] = $("#NoteInput").jqxInput('val');
+	     			refreshCart();
+//	     			console.log('band status change');
+	     		}
+	     		lastNote = $("#NoteInput").jqxInput('val');
         } ) ;
 			}			
 				
@@ -310,18 +366,24 @@
 			function createPackagingButtons(index) {
 				html = "";
 				for (i=0;i<itemPackagingChoiceCount(index);i++) {
-					html = html + '<button style="margin: 3px; padding:4px 32px; font-size: 24px; height: 50px; width: 75%; border-radius: 10px;" id="' + items[1][index]['packaging'][i]['lId'] + '">' + items[1][index]['packaging'][i]['sSellUnit'] + '</button>';
+					html = html + '<button style="margin: 3px; padding:4px 32px; font-size: 24px; height: 50px; width: 75%; border-radius: 10px;" id="' + items[$('#jqxTabs').jqxTabs('selectedItem')][index]['packaging'][i]['lId'] + '">' + items[$('#jqxTabs').jqxTabs('selectedItem')][index]['packaging'][i]['sSellUnit'] + '</button>';
 				}
 				$("#PackagingButtons").html(html);
         $("#PackagingButtons").jqxButtonGroup({ theme: theme, mode: 'radio'});
 
 	      $('#PackagingButtons').on('buttonclick', function (event) {
 	      	if((+new Date()) > itemClickTime + 500) {
-						prepareQuantityDialog(1,$("#ItemList").jqxListBox('getSelectedItem').index,$("#PackagingButtons").jqxButtonGroup('getSelection'),0);
-						console.log($("#ItemList").jqxListBox('getSelectedItem').index);
-						workingItem['lId'] = items[1][$("#ItemList").jqxListBox('getSelectedItem').index]['packaging'][event.args.index]['lId'];
+						prepareQuantityDialog($('#jqxTabs').jqxTabs('selectedItem'),getList().jqxListBox('getSelectedItem').index,$("#PackagingButtons").jqxButtonGroup('getSelection'),0);
+						$("#QuantityInput").first().focus();
+						console.log(getList().jqxListBox('getSelectedItem').index);
+						workingItem['lId'] = items[$('#jqxTabs').jqxTabs('selectedItem')][getList().jqxListBox('getSelectedItem').index]['packaging'][event.args.index]['lId'];
 					}
   			});
+			}
+			
+			function getList() {
+				return [$("#ItemList"),$("#MiscList"),$("#HeatList")][$('#jqxTabs').jqxTabs('selectedItem')-1]
+//				return ( $('#jqxTabs').jqxTabs('selectedItem') == 1 ? $("#ItemList") : $("#MiscList") )
 			}
 			
 			function createOilLubeItemListBox(oilLubeItemDataAdapter,theme){
@@ -362,8 +424,41 @@
 				   } else {
          		$("#ItemList").jqxListBox('clearSelection');
          		$("#MiscList").jqxListBox('clearSelection');
+         		$("#HeatList").jqxListBox('clearSelection');
          	}
 				   	
+				});
+			}	
+			
+			function createHomeHeatListBox(dataAdapter,theme){
+				$("#HeatList").jqxListBox({
+					selectedIndex: -1, 
+					source: dataAdapter, 
+					width: '100%',
+					searchMode: 'containsignorecase',
+					itemHeight: '42px;', 
+					height: '250px', 
+					theme: theme,
+					renderer: function (index, label, value) {
+						return '<div><table><td style="font-size: 24px; ">' + dataAdapter.records[index]['sShortName'] + '</td></table></div>';
+					}  
+				});        
+				$('#HeatList').on('select', function (event) {
+			    var args = event.args;
+			    if (args) {
+		        var index = args.index;
+		        var item = args.item;
+		        var originalEvent = args.originalEvent;
+		        // get item's label and value.
+		        var label = item.label;
+		        var value = item.value;
+  
+  					itemClickTime = +new Date();
+type=						initializeWorkItem(items[3][index]['packaging'][0]['lId']);
+						prepareQuantityDialog(3,index,0,1);
+
+			      $( "#ItemDialog" ).dialog( "open" );
+			    }
 				});
 			}	
 			
@@ -504,6 +599,7 @@
 	    	  			keyPressTime = +new Date();
 	  	       		$("#ItemList").jqxListBox('clearSelection');
 	    	     		$("#MiscList").jqxListBox('clearSelection');
+	    	     		$("#HeatList").jqxListBox('clearSelection');
 	      	   	}
     	  		}
     	  	}
@@ -514,6 +610,7 @@
 				workingItem['lId'] = items[listIndex][itemIndex]['packaging'][0]['lId'];
 				$("#ItemProduct").html("<p style='font-size: 24px; padding: 0px; margins: 0px;'>" + items[listIndex][itemIndex]['sShortName'] + "</p>");
 				$("#ItemPackaging").html("<p style='font-size: 24px; padding: 0px; margins: 0px;'>" + items[listIndex][itemIndex]['packaging'][packagingIndex]['sSellUnit'] + "</p>");
+//				$( "#ItemDialog" ).dialog( { open: function (event, ui) { $('#QuantityInput').focus(); } } );
 				$( "#ItemDialog" ).dialog( "option", "buttons", 
 						{ "Add Item": function() {
 								if( parseFloat(getQuantityVal()) > 0) {
@@ -562,8 +659,10 @@
 	     
 	     function refreshCart() {
 //	     	startCartSpinner();
+				if(cart['priceList'] == null) cart['priceList'] = '1';
 	      $.ajax({
-					url: '/carts.json',
+					url: '/carts.json?status=' + ((cart['band'] != null && cart['band'].length > 0) ? 'true' : 'false' ) +
+						'&type=R&',
 			    type: 'POST',
 			    data: cart,
 			    dataType: 'json',
@@ -641,6 +740,7 @@
 					close: function(event, ui) {
          		$("#ItemList").jqxListBox('clearSelection');
          		$("#MiscList").jqxListBox('clearSelection');
+         		$("#HeatList").jqxListBox('clearSelection');
          	} ,
 		      buttons: {
     		    "Add Item": function() {
@@ -694,6 +794,7 @@
 						cart['invoicenum'] = new Date().toISOString().replace(/-/g,'').replace(/:/g,'').replace(/T/g,'').replace('.','');
 						cart['invoicenum'] = cart['invoicenum'].substring(0,cart['invoicenum'].length - 6);
 					}
+					cart['comment'] = $("#NoteInput").val();
 		      $.ajax({
 						url: '/invoices.json',
 				    type: 'POST',

@@ -8,7 +8,8 @@ class SalesController < ApplicationController
   def index
 #  	@sales = Sale.all
 
-		@customers = Net::HTTP.get(URI.parse( Counter::Application.config.simplyurl + 'customers.json'))
+#		@customers = Net::HTTP.get(URI.parse( Counter::Application.config.simplyurl + 'customers.json'))
+		@customers = Customer.all
 #		@customers = Net::HTTP.get(URI.parse('http://127.0.0.1:3001/customers.json'))
 #		@items = Net::HTTP.get(URI.parse('http://127.0.0.1:3001/items.json'))
 		@items = Net::HTTP.get(URI.parse( Counter::Application.config.simplyurl + 'items.json'))

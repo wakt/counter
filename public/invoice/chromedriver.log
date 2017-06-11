@@ -1,0 +1,214 @@
+[0.001][INFO]:      ChromeDriver 26.0.1383.0 C:\installs\chromedriver_win_26.0.1383.0\chromedriver.exe
+[0.521][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chrome.detach": true,
+   "chromeOptions": {
+      "detach": true
+   },
+   "cssSelectorsEnabled": true,
+   "javascriptEnabled": true,
+   "nativeEvents": false,
+   "platform": "ANY",
+   "rotatable": false,
+   "takesScreenshot": false,
+   "version": ""
+}
+
+[0.521][INFO]:      Using named testing interface
+[3.089][INFO]:      Connected to Chrome successfully. Version: 27.0.1453.94
+[3.103][FINE]:      Command received (/session/f48b8b6932db4e1958779d2772bd749a)
+[3.103][FINE]:      Command finished (/session/f48b8b6932db4e1958779d2772bd749a) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "26.0.1383.0",
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "windows",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "27.0.1453.94",
+      "webStorageEnabled": true
+   }
+}
+
+[3.114][FINE]:      Command received (/session/f48b8b6932db4e1958779d2772bd749a/url)
+[3.114][FINER]:     Waiting for all views to stop loading...
+[3.115][FINER]:     Done waiting for all views to stop loading
+[3.123][FINER]:     Waiting for all views to stop loading...
+[3.124][FINER]:     Done waiting for all views to stop loading
+[3.124][FINE]:      Command finished (/session/f48b8b6932db4e1958779d2772bd749a/url) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "about:blank"
+}
+
+[3.136][FINE]:      Command received (/session/f48b8b6932db4e1958779d2772bd749a/title)
+[3.137][FINER]:     Waiting for all views to stop loading...
+[3.137][FINER]:     Done waiting for all views to stop loading
+[3.141][FINER]:     Waiting for all views to stop loading...
+[3.142][FINER]:     Done waiting for all views to stop loading
+[3.142][FINE]:      Command finished (/session/f48b8b6932db4e1958779d2772bd749a/title) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "about:blank"
+}
+
+[44.019][FINE]:     Command received (/session/f48b8b6932db4e1958779d2772bd749a/url) with params {
+   "url": "http://yard.fastfuels.com/sales"
+}
+
+[44.019][FINER]:    Waiting for all views to stop loading...
+[44.020][FINER]:    Done waiting for all views to stop loading
+[45.918][FINER]:    Waiting for all views to stop loading...
+[45.918][FINER]:    Done waiting for all views to stop loading
+[45.918][FINE]:     Command finished (/session/f48b8b6932db4e1958779d2772bd749a/url) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[45.925][FINE]:     Command received (/session/f48b8b6932db4e1958779d2772bd749a/url)
+[45.926][FINER]:    Waiting for all views to stop loading...
+[45.926][FINER]:    Done waiting for all views to stop loading
+[45.931][FINER]:    Waiting for all views to stop loading...
+[45.931][FINER]:    Done waiting for all views to stop loading
+[45.931][FINE]:     Command finished (/session/f48b8b6932db4e1958779d2772bd749a/url) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "http://yard.fastfuels.com/sales"
+}
+
+[149.172][FINE]:    Command received (/session/f48b8b6932db4e1958779d2772bd749a/url)
+[149.172][FINER]:   Waiting for all views to stop loading...
+[149.173][FINER]:   Done waiting for all views to stop loading
+[149.177][FINER]:   Waiting for all views to stop loading...
+[149.177][FINER]:   Done waiting for all views to stop loading
+[149.177][FINE]:    Command finished (/session/f48b8b6932db4e1958779d2772bd749a/url) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "http://yard.fastfuels.com/sales"
+}
+
+[149.183][FINE]:    Command received (/session/f48b8b6932db4e1958779d2772bd749a/title)
+[149.183][FINER]:   Waiting for all views to stop loading...
+[149.184][FINER]:   Done waiting for all views to stop loading
+[149.188][FINER]:   Waiting for all views to stop loading...
+[149.188][FINER]:   Done waiting for all views to stop loading
+[149.188][FINE]:    Command finished (/session/f48b8b6932db4e1958779d2772bd749a/title) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "Counter"
+}
+
+[155.110][FINE]:    Command received (/session/f48b8b6932db4e1958779d2772bd749a/elements) with params {
+   "using": "xpath",
+   "value": "//div[@role=\"gridcell\"]"
+}
+
+[155.110][FINER]:   Waiting for all views to stop loading...
+[155.111][FINER]:   Done waiting for all views to stop loading
+[155.137][FINER]:   Waiting for all views to stop loading...
+[155.137][FINER]:   Done waiting for all views to stop loading
+[155.138][FINE]:    Command finished (/session/f48b8b6932db4e1958779d2772bd749a/elements) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": [ {
+      "ELEMENT": ":wdc:1370210068894"
+   }, {
+      "ELEMENT": ":wdc:1370210068895"
+   }, {
+      "ELEMENT": ":wdc:1370210068896"
+   }, {
+      "ELEMENT": ":wdc:1370210068897"
+   }, {
+      "ELEMENT": ":wdc:1370210068898"
+   }, {
+      "ELEMENT": ":wdc:1370210068899"
+   }, {
+      "ELEMENT": ":wdc:1370210068900"
+   }, {
+      "ELEMENT": ":wdc:1370210068901"
+   }, {
+      "ELEMENT": ":wdc:1370210068902"
+   }, {
+      "ELEMENT": ":wdc:1370210068903"
+   }, {
+      "ELEMENT": ":wdc:1370210068904"
+   }, {
+      "ELEMENT": ":wdc:1370210068905"
+   }, {
+      "ELEMENT": ":wdc:1370210068906"
+   }, {
+      "ELEMENT": ":wdc:1370210068907"
+   }, {
+      "ELEMENT": ":wdc:1370210068908"
+   }, {
+      "ELEMENT": ":wdc:1370210068909"
+   }, {
+      "ELEMENT": ":wdc:1370210068910"
+   }, {
+      "ELEMENT": ":wdc:1370210068911"
+   }, {
+      "ELEMENT": ":wdc:1370210068912"
+   }, {
+      "ELEMENT": ":wdc:1370210068913"
+   } ]
+}
+
+[171.711][FINE]:    Command received (/session/f48b8b6932db4e1958779d2772bd749a/element/:wdc:1370210068894/text)
+[171.711][FINER]:   Waiting for all views to stop loading...
+[171.712][FINER]:   Done waiting for all views to stop loading
+[171.750][FINER]:   Waiting for all views to stop loading...
+[171.751][FINER]:   Done waiting for all views to stop loading
+[171.751][FINE]:    Command finished (/session/f48b8b6932db4e1958779d2772bd749a/element/:wdc:1370210068894/text) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "Low Sulphur Dyed Diesel"
+}
+
+[299.926][FINE]:    Command received (/session/f48b8b6932db4e1958779d2772bd749a/element/:wdc:1370210068913/text)
+[299.926][FINER]:   Waiting for all views to stop loading...
+[299.926][FINER]:   Done waiting for all views to stop loading
+[299.956][FINER]:   Waiting for all views to stop loading...
+[299.956][FINER]:   Done waiting for all views to stop loading
+[299.956][FINE]:    Command finished (/session/f48b8b6932db4e1958779d2772bd749a/element/:wdc:1370210068913/text) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "$142.79"
+}
+
+[1243.106][FINE]:   Command received (/session/f48b8b6932db4e1958779d2772bd749a/url)
+[1243.106][FINER]:  Waiting for all views to stop loading...
+[1243.107][FINER]:  Done waiting for all views to stop loading
+[1243.112][FINER]:  Waiting for all views to stop loading...
+[1243.113][FINER]:  Done waiting for all views to stop loading
+[1243.113][FINE]:   Command finished (/session/f48b8b6932db4e1958779d2772bd749a/url) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "http://yard.fastfuels.com/sales"
+}
+
+[1243.118][FINE]:   Command received (/session/f48b8b6932db4e1958779d2772bd749a/title)
+[1243.118][FINER]:  Waiting for all views to stop loading...
+[1243.119][FINER]:  Done waiting for all views to stop loading
+[1243.123][FINER]:  Waiting for all views to stop loading...
+[1243.124][FINER]:  Done waiting for all views to stop loading
+[1243.124][FINE]:   Command finished (/session/f48b8b6932db4e1958779d2772bd749a/title) with response {
+   "sessionId": "f48b8b6932db4e1958779d2772bd749a",
+   "status": 0,
+   "value": "Counter"
+}
+
+[3713.579][FINE]:   Command received (/session/f48b8b6932db4e1958779d2772bd749a/element/:wdc:1370210068913/text)
+[3713.580][FINER]:  Waiting for all views to stop loading...

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id='Description'>The front counter app</title>
+		<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
+		<link rel="icon" type="image/ico" href="images/favicon.ico" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.css" type="text/css" />
+    <link rel="stylesheet" href="css/theme1.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+	  <script type="text/javascript" src="jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdata.js"></script> 
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxmaskedinput.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="js/spin.js"></script>
+    
+  		<style>
+			.ui-dialog-titlebar
+			{
+				background-color: #BBC8F9;
+				border-top-color: #BBC8F9;
+				border-left-color: #BBC8F9;
+				border-right-color: #BBC8F9;
+				border-bottom-color: #BBC8F9;
+				border: #FFFFFF;
+				background: -webkit-gradient(linear, left top, left bottom, from(#bbc8f9), to(#fff));
+			}
+			
+			.ui-widget input,
+			.ui-widget select,
+			.ui-widget textarea,
+			.ui-widget button {
+				font-size: 20px;
+			}
+			
+		</style>
+	
+		<% @title="Fast Fuels Supplemental Customer Data" %>
+		
+    <script type="text/javascript" src="js/custsupp.js"></script>
+    
+    <script type="text/javascript">
+
+      var theme = 'theme1';
+//      var data2 = '<%= @customers %>';
+			var customers = '<%= @customers.gsub(/,/,",\\\n").gsub(/\'/,%q(\\\')).html_safe %>';
+			var custList = JSON.parse(customers);
+      var items = JSON.parse('<%= @items.gsub(/\],/,"\],\\\n").gsub(/\},/,"\},\\\n").gsub(/\\\"/,"&quot;").gsub(/\'/,%q(\\\')).html_safe %>');
+
+      $(document).ready(function () {
+          var custSource = createCustomerSource(customers);
+	        var custDataAdapter = new $.jqx.dataAdapter(custSource);
+	        createCustomerList(custDataAdapter);
+	        
+ 					createBandInput(theme);
+					
+          var taxSource = createTaxationSource();
+	        var taxDataAdapter = new $.jqx.dataAdapter(taxSource);
+	        createTaxationList(taxDataAdapter);
+
+          var fuelSource = createFuelSource();
+	        var fuelDataAdapter = new $.jqx.dataAdapter(fuelSource);
+	        createFuelList(fuelDataAdapter);
+
+          var positionSource = createPositionSource();
+	        var positionDataAdapter = new $.jqx.dataAdapter(positionSource);
+	        createPositionList(positionDataAdapter);
+
+          var fobSource = createFobSource();
+	        var fobDataAdapter = new $.jqx.dataAdapter(fobSource);
+	        createFobList(fobDataAdapter);
+
+//          var fobProductSource = createFobProductSource();
+//	        var fobProductDataAdapter = new $.jqx.dataAdapter(fobProductSource);
+//	        createFobProductList(fobProductDataAdapter);
+
+     	});
+        
+    </script>
+</head>
+
+<body class='default'>
+<div id='root' class="ui-widget">
+	<table style = "width: 100%">
+		<tr>
+			<td style = "width: 20%;">
+			</td>
+			<td style = "width: 60%;">
+				<table style = "width:100%;">
+					<tr>
+						<td style = "width:100%">
+							<table style = "width:100%">
+								<tr>
+									<td style = "width:100%">
+										<div id="CustomerList" style = "width: 100%;"></div>
+									</td>
+								</tr>
+							</table>								
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table style = "width:100%;">
+								<tr>
+									<td style = "width:50%">
+		    		    		<input style='margin-top: 3px;' id='BandInput' placeHolder="Band Number"/>
+									</td>
+									<td style = "width:50%">
+										<div id="TaxationList" style = "width: 100%;"></div>
+									</td>
+								</tr>
+								<tr>
+									<td style = "width:50%">
+										<input type="checkbox" name="vehicle" value="Bike">Customer Account On Hold
+									</td>
+									<td style = "width:50%">
+										<input type="checkbox" name="vehicle" value="Bike">Customer Is An Employee
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table style = "width:100%">
+								<tr>
+									<td style = "width:100%">
+										<div id="TankInfoContainer">
+											<div id="TankInfo" class = "jqx-fill-state-normal jqx-fill-state-normal-theme1 jqx-dropdownlist-state-normal jqx-dropdownlist-state-normal-theme1 jqx-rc-all jqx-rc-all-theme1 jqx-widget jqx-widget-theme1 jqx-widget-content jqx-widget-content-theme1">Tank Information</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table style = "width:100%">
+								<tr>
+									<td style = "width:50%">
+	  	    	    		<input style='margin-top: 3px;' id='AccessCodeInput' placeHolder="Access Code"/>
+	  	    	    	</td>
+									<td style = "width:50%">
+										<div id="FuelList" style = "width: 100%;"></div>
+	  	    	    	</td>
+	  	    	    </tr>
+								<tr>
+									<td style = "width:50%">
+	  	    	    		<input style='margin-top: 3px;' id='RegionCodeInput' placeHolder="Region Code"/>
+	  	    	    	</td>
+									<td style = "width:50%">
+	  	    	    		<input style='margin-top: 3px;' id='CapacityInput' placeHolder="Capacity"/>
+	  	    	    	</td>
+	  	    	    </tr>
+	  	    	  </table>
+						</td>
+					</tr>
+					<tr>
+						<td style = "width:100%">
+							<table style = "width:50%">
+ 								<tr>
+									<td style = "width:100%">
+										<div id="PositionList" style = "width: 100%;"></div>
+	  	    	    	</td>
+	  	    	    </tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style = "width:100%">
+							<table style = "width:100%">
+								<tr>
+									<td style = "width:50%; vertical-align:top">
+										<div id="FobList" style = "width: 100%;"></div>
+									</td>
+									<td style = "width:50%">
+										<table style = "width:100%">
+											<tr>
+												<td style = "width:100%">
+						    	    		<input style='margin-top: 3px;' id='FobInput' placeHolder="Fob Description"/>
+						    	    	</td>
+						    	    </tr>
+						    	    <tr>
+						    	    	<td>
+				       						<button style="margin: 3px; padding:4px 32px; font-size: 24px; border-radius: 5px;" id="AddFob">Add Fob</button>
+				       					</td>
+				       				</tr>
+				       			</table>
+									</td>
+								</tr>
+							</table>								
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td style = "width: 20%;">
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>	
+
